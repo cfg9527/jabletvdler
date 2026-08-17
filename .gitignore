@@ -29,3 +29,6 @@ graphify-out/
 
 # Personal agent config (kept local only)
 instructions/
+# Project planning notes (kept local only)
+tasks/
+openspec/
