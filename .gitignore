@@ -26,3 +26,6 @@ downloaded/
 
 # Generated output
 graphify-out/
+
+# Personal agent config (kept local only)
+instructions/
