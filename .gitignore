@@ -1,0 +1,28 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.venv/
+venv/
+
+# Caches
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+
+# Tool data / logs
+.opencode/
+.todowrite-data.json
+ai_log.txt
+log/
+
+# Downloads (large video files)
+downloaded/
+
+# Generated output
+graphify-out/
