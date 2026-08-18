@@ -1,5 +1,7 @@
 # JableTV Downloader — Design Document
 
+Visual taste primer (palette, chrome, motion, screens): [taste.html](./taste.html)
+
 ## Context
 A terminal-based video downloader for jable.tv that uses HLS (m3u8) streaming protocol.
 Target audience: technical users comfortable with the terminal.

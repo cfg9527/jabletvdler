@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>JableTV Downloader — Design &amp; Taste</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --accent: #fe628e;
+      --secondary-pink: #ff6a88;
+      --coral: #ff8382;
+      --deeppink: #ff1493;
+      --hotpink: #ff69b4;
+      --primary: #91a5f4;
+      --lilac: #b08cf9;
+      --surface: #161a26;
+      --surface-2: #191d28;
+      --surface-3: #1e2333;
+      --text: #e0e0e0;
+      --text-2: #b8babc;
+      --muted: #8e9194;
+      --border: #5e5d5a;
+      --success: #1db954;
+      --warning: #ffd700;
+      --amber: #ff8c00;
+      --no-bg: #3a3a3a;
+      --no-text: #888888;
+      --sage: #4a5d4e;
+      --emerald: #10b981;
+      --variant-coral: #ff6b6b;
+      --variant-amber: #f59e0b;
+      --font-display: "Fraunces", "Iowan Old Style", Palatino, Georgia, serif;
+      --font-sans: "Outfit", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", "SF Mono", ui-monospace, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--surface);
+      color: var(--text);
+      font-family: var(--font-sans);
+      font-weight: 400;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* Outer chrome — the product’s window-wrapper, translated */
+    .app-frame {
+      min-height: 100vh;
+      border: 6px solid var(--accent);
+      animation: breathe 6s ease-in-out infinite;
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(254, 98, 142, 0.08), transparent 50%),
+        radial-gradient(900px 500px at 110% 0%, rgba(145, 165, 244, 0.08), transparent 45%),
+        var(--surface);
+    }
+
+    @keyframes breathe {
+      0%, 100% { border-color: #fe628e; }
+      50% { border-color: #ff69b4; }
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem 1.2rem;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 1.6rem;
+      background: color-mix(in srgb, var(--surface) 88%, transparent);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid color-mix(in srgb, var(--accent) 28%, var(--border));
+    }
+
+    nav .brand {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+    }
+
+    nav a:hover { color: var(--hotpink); }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem 1.1rem;
+    }
+
+    main {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 5rem;
+    }
+
+    /* Hero */
+    header.hero {
+      padding: 2.2rem 0 3.4rem;
+      text-align: center;
+    }
+
+    .figlet {
+      font-family: var(--font-mono);
+      font-size: clamp(7px, 1.15vw, 13px);
+      line-height: 1.12;
+      color: var(--deeppink);
+      font-weight: 600;
+      white-space: pre;
+      overflow-x: auto;
+      text-align: center;
+      margin: 0 auto 1.4rem;
+      text-shadow: 0 0 24px rgba(255, 20, 147, 0.28);
+    }
+
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 0.7rem;
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.1rem, 5vw, 3.6rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.12;
+      color: var(--text);
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--accent);
+      font-weight: 400;
+    }
+
+    .lede {
+      max-width: 38rem;
+      margin: 1.1rem auto 0;
+      color: var(--text-2);
+      font-size: 1.08rem;
+      font-weight: 300;
+    }
+
+    section {
+      margin: 4.2rem 0;
+    }
+
+    h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 3vw, 2.15rem);
+      font-weight: 600;
+      margin-bottom: 0.85rem;
+      letter-spacing: -0.02em;
+    }
+
+    h3 {
+      font-family: var(--font-sans);
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 1.4rem 0 0.5rem;
+    }
+
+    p { color: var(--text-2); margin-bottom: 0.9rem; }
+    p strong { color: var(--text); font-weight: 500; }
+
+    .thesis {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 1.6rem;
+      align-items: start;
+    }
+
+    .pull {
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      padding: 1.3rem 1.4rem;
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-style: italic;
+      line-height: 1.45;
+      color: var(--text);
+    }
+
+    .pull span {
+      display: block;
+      margin-top: 0.9rem;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-style: normal;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    /* Palette */
+    .swatches {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+      gap: 0.7rem;
+    }
+
+    .swatch {
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      overflow: hidden;
+    }
+
+    .swatch .chip {
+      height: 72px;
+    }
+
+    .swatch dl {
+      padding: 0.65rem 0.75rem 0.8rem;
+    }
+
+    .swatch dt {
+      font-size: 0.78rem;
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .swatch dd {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.4rem;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      padding: 1.2rem 1.3rem;
+    }
+
+    .card:focus-within,
+    .card:hover {
+      border-color: var(--accent);
+    }
+
+    /* Terminal mock */
+    .tui {
+      background: var(--surface);
+      border: 3px solid var(--accent);
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      line-height: 1.45;
+      color: var(--text);
+      overflow: hidden;
+    }
+
+    .tui .titlebar {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.35rem 0.7rem;
+      color: var(--accent);
+      border-bottom: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .tui .clock { color: var(--muted); letter-spacing: 0; text-transform: none; }
+
+    .tui .body { padding: 0.85rem 0.9rem 1rem; }
+
+    .tui .panel {
+      border: 1px solid var(--border);
+      padding: 0.7rem;
+      margin: 0.45rem 0;
+    }
+
+    .tui .panel.focus { border-color: var(--accent); }
+
+    .tui .input {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      padding: 0.35rem 0.5rem;
+    }
+
+    .tui .row { display: flex; gap: 0.4rem; margin: 0.45rem 0; }
+
+    .tui .btn {
+      flex: 1;
+      text-align: center;
+      padding: 0.28rem 0.4rem;
+      background: var(--surface-2);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .tui .btn.primary {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .tui .bar {
+      height: 8px;
+      background: var(--surface-2);
+      margin: 0.45rem 0;
+    }
+
+    .tui .bar > i {
+      display: block;
+      width: 62%;
+      height: 100%;
+      background: var(--accent);
+    }
+
+    .tui .status { text-align: center; color: var(--muted); }
+    .tui .meta { color: var(--text); }
+    .tui .cyan { color: #22d3ee; font-weight: 600; }
+    .tui .gold { color: #facc15; font-weight: 600; }
+    .tui .dim { color: var(--muted); }
+    .tui .pink { color: var(--deeppink); font-weight: 600; }
+    .tui .warn { color: var(--warning); font-weight: 600; }
+    .tui .amber { color: var(--amber); }
+    .tui .center { text-align: center; }
+    .tui .spark { color: var(--accent); letter-spacing: -0.08em; }
+    .tui .footer {
+      display: flex;
+      gap: 1rem;
+      padding: 0.35rem 0.7rem;
+      border-top: 1px solid var(--surface-2);
+      color: var(--muted);
+    }
+    .tui .footer b { color: var(--secondary-pink); font-weight: 600; margin-right: 0.25rem; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .grid-4 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.45rem; }
+    .pane {
+      border: 1px solid var(--border);
+      padding: 0.45rem 0.55rem;
+      min-height: 5.2rem;
+    }
+    .pane .pt { color: var(--accent); font-weight: 600; margin-bottom: 0.25rem; }
+
+    /* Live hover demo */
+    .demo-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 0.8rem;
+    }
+
+    .live-btn {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--text);
+      padding: 0.55rem 1.1rem;
+      cursor: pointer;
+      min-width: 8.5rem;
+      transition: background 0.12s ease, color 0.12s ease, border-color 0.12s ease, font-weight 0.12s ease;
+    }
+
+    .live-btn.work {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .live-btn.yes {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+      font-weight: 600;
+    }
+
+    .live-btn.no {
+      background: var(--no-bg);
+      color: var(--no-text);
+      border-color: var(--no-bg);
+    }
+
+    .live-btn:hover {
+      background: var(--hotpink);
+      color: #fff;
+      border-color: var(--hotpink);
+      font-weight: 700;
+    }
+
+    /* Principles */
+    ol.rules {
+      list-style: none;
+      counter-reset: rule;
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    ol.rules li {
+      counter-increment: rule;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      padding: 1rem 1.1rem 1rem 3.4rem;
+      position: relative;
+    }
+
+    ol.rules li::before {
+      content: counter(rule);
+      position: absolute;
+      left: 0.9rem;
+      top: 1rem;
+      font-family: var(--font-display);
+      font-style: italic;
+      color: var(--accent);
+      font-size: 1.25rem;
+    }
+
+    ol.rules li strong {
+      display: block;
+      color: var(--text);
+      margin-bottom: 0.2rem;
+    }
+
+    .refuse {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.7rem;
+    }
+
+    .refuse div {
+      border: 1px dashed var(--border);
+      padding: 0.9rem 1rem;
+    }
+
+    .refuse .no { color: var(--coral); }
+    .refuse .yes { color: var(--accent); }
+
+    .caption {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: 0.45rem;
+    }
+
+    footer.colophon {
+      margin-top: 4rem;
+      padding-top: 1.4rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-align: center;
+    }
+
+    footer.colophon a { color: var(--accent); text-decoration: none; }
+    footer.colophon a:hover { color: var(--hotpink); }
+
+    code {
+      font-family: var(--font-mono);
+      font-size: 0.86em;
+      color: var(--primary);
+    }
+
+    @media (max-width: 820px) {
+      .thesis, .split, .grid-2, .refuse { grid-template-columns: 1fr; }
+      .figlet { font-size: 6px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-frame">
+    <nav>
+      <div class="brand">PinkyTheme · JableTV_DL</div>
+      <div class="nav-links">
+        <a href="#taste">Taste</a>
+        <a href="#palette">Palette</a>
+        <a href="#chrome">Chrome</a>
+        <a href="#motion">Motion</a>
+        <a href="#screens">Screens</a>
+        <a href="#rules">Rules</a>
+      </div>
+    </nav>
+
+    <main>
+      <header class="hero">
+        <pre class="figlet">       _____    ____  __    _____________    __     ____  __
+      / /   |  / __ )/ /   / ____/_  __/ |  / /    / __ \/ /
+ __  / / /| | / __  / /   / __/   / /  | | / /    / / / / /
+/ /_/ / ___ |/ /_/ / /___/ /___  / /   | |/ /    / /_/ / /___
+\____/_/  |_/_____/_____/_____/ /_/    |___/____/_____/_____/
+                                          /_____/</pre>
+        <div class="eyebrow">Textual TUI · Age gate · Late night</div>
+        <h1>A terminal dressed in <em>blush</em>.</h1>
+        <p class="lede">
+          JableTV Downloader is not a dark-mode utility with a pink sticker.
+          It is a late-night machine whose identity is pink, whose work color is periwinkle,
+          and whose windows breathe.
+        </p>
+      </header>
+
+      <section id="taste">
+        <h2>Designer taste</h2>
+        <div class="thesis">
+          <div>
+            <p>
+              The taste is <strong>unapologetic pink on blue-black cinema</strong>.
+              Surfaces sit at <code>#161a26</code> — not generic charcoal, not VS Code gray —
+              a navy so dark it reads as a room with the lights off.
+              Against that room, the brand is not a 2px accent. It is the window itself:
+              a heavy pink frame that inhales and exhales between <code>#fe628e</code> and hotpink.
+            </p>
+            <p>
+              The designer chose <strong>Textual over a desktop GUI</strong> so the app can live over SSH,
+              then refused to let “terminal-native” mean austere.
+              Figlet slant on the age gate. Bilingual legal copy in gold and amber.
+              Hover states that flash hotpink and go bold — desire as a pointer event.
+              A speed sparkline in accent. Footer keys in secondary pink.
+            </p>
+            <p>
+              This is camp with a straight face: ceremony at the door (18+),
+              a quiet workbench in the middle, and CSS already written for confetti,
+              checkmarks, and a farewell screen — ritual designed before it was wired.
+              Adult, not crude. Fashionable, not ironic.
+            </p>
+          </div>
+          <blockquote class="pull">
+            Pink is the brand. Periwinkle is the job. Hover is the blush.
+            <span>PinkyTheme · jabletv/themes.py</span>
+          </blockquote>
+        </div>
+      </section>
+
+      <section id="palette">
+        <h2>Palette</h2>
+        <p>
+          Named in code as <code>PinkyTheme</code>. Two families share the screen:
+          a warm rose stack (identity, hover, age-gate art) and a cool periwinkle–lilac pair (primary actions).
+          Success borrows Spotify green. Warnings stay literal gold.
+        </p>
+        <div class="swatches">
+          <article class="swatch"><div class="chip" style="background:#fe628e"></div><dl><dt>Accent</dt><dd>#fe628e</dd></dl></article>
+          <article class="swatch"><div class="chip" style="background:#ff69b4"></div><dl><dt>Hotpink hover</dt><dd>#ff69b4</dd></dl></article>
+          <article class="swatch"><div class="chip" style="background:#ff6a88"></div><dl><dt>Secondary pink</dt><dd>#ff6a88</dd></dl></article>
+          <article class="swatch"><div class="chip" style="background:#ff1493"></div><dl><dt>Deeppink art</dt><dd>#ff1493</dd></dl></article>
+          <article class="swatch"><div class="chip" style="background:#ff8382"></div><dl><dt>Coral / error</dt><dd>#ff8382</dd></dl></article>
+          <article class="swatch"><div class="chip" style="background:linear-gradient(90deg,#91a5f4,#b08cf9)"></div><dl><dt>Primary gradient</dt><dd>#91a5f4 → #b08cf9</dd></dl></article>
+          <article class="swatch"><div class="chip" style="background:#161a26;border-bottom:1px solid #5e5d5a"></div><dl><dt>Surface dark</dt><dd>#161a26</dd></dl></article>
+          <article class="swatch"><div class="chip" style="background:#191d28;border-bottom:1px solid #5e5d5a"></div><dl><dt>Surface light</dt><dd>#191d28</dd></dl></article>
+          <article class="swatch"><div class="chip" style="background:#e0e0e0"></div><dl><dt>Text primary</dt><dd>#e0e0e0</dd></dl></article>
+          <article class="swatch"><div class="chip" style="background:#8e9194"></div><dl><dt>Text muted</dt><dd>#8e9194</dd></dl></article>
+          <article class="swatch"><div class="chip" style="background:#1db954"></div><dl><dt>Success</dt><dd>#1db954</dd></dl></article>
+          <article class="swatch"><div class="chip" style="background:#5e5d5a"></div><dl><dt>Border muted</dt><dd>#5e5d5a</dd></dl></article>
+        </div>
+        <p class="caption">Unused-but-named variants (coral, sage, emerald, amber) sit in the theme for completion screens. The taste includes colors waiting for a ritual.</p>
+      </section>
+
+      <section id="chrome">
+        <h2>Chrome &amp; type</h2>
+        <div class="split">
+          <div class="card">
+            <h3>Window</h3>
+            <p>
+              Everything lives inside <code>#window-wrapper</code>: 100% fill, <strong>heavy accent border</strong>,
+              titled per screen — <em>Age Gate</em>, <em>JableTV Downloader</em>, <em>Library</em>, <em>Dashboard</em>.
+              Inner panels use a muted stone border until focus, then they flush pink.
+              The main column is 80 characters wide, centered. A TUI that still believes in 80 columns.
+            </p>
+            <h3>Type</h3>
+            <p>
+              Terminal default + figlet <code>slant</code> for the gate.
+              Copy hierarchy is color, not size: primary <code>#e0e0e0</code>,
+              secondary <code>#b8babc</code>, muted <code>#8e9194</code>.
+              Metadata uses cyan for codes, yellow for names, italic for tags —
+              Rich markup as typography, not decoration.
+            </p>
+          </div>
+          <div class="card">
+            <h3>Layout personality</h3>
+            <p>
+              Structure is quiet. Color is loud. The download form is a vertical stack:
+              URL, three equal actions, progress, sparkline, status, metadata, log.
+              Library is search + table + detail. Dashboard is a 2×2 of panes.
+              No chrome for chrome’s sake — then a single theatrical object (the breathing frame, the figlet) carries the fashion.
+            </p>
+            <h3>Language</h3>
+            <p>
+              English warning in gold bold. Japanese warning in amber.
+              The product speaks two registers at once: legal clarity and late-night JP/EN adjacency.
+              Buttons are plain speech: <em>Yes, I am 18+</em> / <em>No</em> / <em>Download</em> / <em>Back</em>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="motion">
+        <h2>Motion: breathe, then blush</h2>
+        <p>
+          The outer border animates for 3 seconds toward <code>#ff69b4</code>, then 3 seconds back to <code>#fe628e</code>.
+          That is the only ambient motion. Hover is the other half of the personality:
+          secondary surfaces stay dim until the pointer arrives, then they become hotpink, white, and bold in one beat.
+          Work stays periwinkle until you hover it — then it blushes too.
+        </p>
+        <div class="demo-row">
+          <button class="live-btn work" type="button">Download</button>
+          <button class="live-btn" type="button">Library</button>
+          <button class="live-btn" type="button">Dashboard</button>
+          <button class="live-btn yes" type="button">Yes, I am 18+</button>
+          <button class="live-btn no" type="button">No</button>
+        </div>
+        <p class="caption">Hover any control. The theme does not fade toward pink — it snaps into it.</p>
+      </section>
+
+      <section id="screens">
+        <h2>Screens as costume changes</h2>
+        <p>
+          Same room, different outfits. The frame never leaves. What changes is how much pink you are allowed to feel.
+        </p>
+
+        <h3>Age gate — ceremony</h3>
+        <p>Deeppink figlet, dual-language warning, a loud Yes and a gray No. The designer will not let you skip the threshold.</p>
+        <div class="tui" style="max-width: 720px; margin: 0.6rem auto 2rem;">
+          <div class="titlebar"><span> Age Gate </span><span class="clock">00:00</span></div>
+          <div class="body">
+            <div class="center pink">JABLETV_DL</div>
+            <div class="center warn" style="margin-top:0.5rem">WARNING: This site contains adult content. You must be at least 18 years old to enter.</div>
+            <div class="center amber">警告：このサイトには成人向けコンテンツが含まれています。入場するには18歳以上である必要があります。</div>
+            <div class="row" style="max-width:28rem;margin:0.8rem auto 0">
+              <div class="btn" style="background:#fe628e;border-color:#fe628e;color:#fff;font-weight:700">Yes, I am 18+</div>
+              <div class="btn" style="background:#3a3a3a;border-color:#3a3a3a;color:#888">No</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2">
+          <div>
+            <h3>Download — the workbench</h3>
+            <p>Periwinkle primary. Muted siblings. Accent fill on the bar. Sparkline in pink. Status centered and quiet until there is news.</p>
+            <div class="tui">
+              <div class="titlebar"><span> JableTV Downloader </span><span class="clock">02:14</span></div>
+              <div class="body">
+                <div class="panel focus">
+                  <div class="input">Paste video URL (jable.tv or missav.ws)</div>
+                  <div class="row">
+                    <div class="btn primary">Download</div>
+                    <div class="btn">Library</div>
+                    <div class="btn">Dashboard</div>
+                  </div>
+                  <div class="bar"><i></i></div>
+                  <div class="spark">▁▂▃▅▆▅▇▆▅▄▆▇█▇▆▅▄▃</div>
+                  <div class="status">Status: 62% | 4.2 MB/s | ETA: 0:41</div>
+                  <div class="meta">
+                    <strong>DLDSS-507</strong><br />
+                    Code: <span class="cyan">DLDSS-507</span><br />
+                    Actresses: <span class="gold">—</span>
+                  </div>
+                </div>
+              </div>
+              <div class="footer"><span><b>l</b> Library</span><span><b>d</b> Dashboard</span></div>
+            </div>
+          </div>
+          <div>
+            <h3>Library &amp; dashboard — inventory</h3>
+            <p>Accent headers, 30% accent cursor, four equal panes. Fashion recedes so the collection can speak.</p>
+            <div class="tui">
+              <div class="titlebar"><span> Dashboard </span><span class="clock">02:15</span></div>
+              <div class="body">
+                <div class="grid-4">
+                  <div class="pane"><div class="pt">Top Tags</div><div>idol <span class="dim">12</span></div></div>
+                  <div class="pane"><div class="pt">Top Titles</div><div>ABP-664 — …</div></div>
+                  <div class="pane"><div class="pt">Top Actresses</div><div>彩美旬果 <span class="dim">3</span></div></div>
+                  <div class="pane"><div class="pt">Library Summary</div><div>Total videos: <strong>18</strong></div></div>
+                </div>
+                <div class="row" style="max-width:10rem;margin:0.7rem auto 0">
+                  <div class="btn">Back</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="rules">
+        <h2>Taste rules</h2>
+        <ol class="rules">
+          <li>
+            <strong>Pink is identity, not a highlight.</strong>
+            If you can remove the pink and the product still looks like “any TUI,” the design has failed.
+            The heavy frame, the figlet, the hover blush, and the progress fill must remain pink.
+          </li>
+          <li>
+            <strong>Periwinkle does the work.</strong>
+            Primary actions (Download, Open URL, Yes) may start cool. They are allowed to blush on hover.
+            Do not make every button pink at rest — that would flatten the desire curve.
+          </li>
+          <li>
+            <strong>Navy is a room, not a theme preset.</strong>
+            Keep <code>#161a26</code> / <code>#191d28</code>. Do not drift into pure black or warm charcoal.
+            The blue in the black is what makes the rose look expensive.
+          </li>
+          <li>
+            <strong>Quiet structure, loud color.</strong>
+            Centered 80-col stacks, muted stone borders, one theatrical object.
+            Resist extra panels, shadows, and fake window chrome.
+          </li>
+          <li>
+            <strong>Hover snaps. Ambient breathes.</strong>
+            Border: 3s ease, two pinks. Pointer: instant hotpink + bold + white text.
+            No other animation unless it reports speed (sparkline).
+          </li>
+          <li>
+            <strong>Ceremony at the edges.</strong>
+            Age-gate the session. Keep bilingual warnings. Leave room for a farewell.
+            A downloader can still have a door and a goodbye.
+          </li>
+          <li>
+            <strong>Terminal-native, dressed.</strong>
+            Textual, SSH, figlet, Rich markup, footer keys. Never a CustomTkinter skin pretending to be an OS app.
+          </li>
+        </ol>
+
+        <h3>Refuse / prefer</h3>
+        <div class="refuse">
+          <div>
+            <p class="no">Refuse</p>
+            <p>Blue-accent “hacker” dark mode. Purple vaporwave soup. Light theme. Rounded consumer-app cards. Tiny pink dots on gray chrome. Skipping the age gate. Ironic Comic Sans energy.</p>
+          </div>
+          <div>
+            <p class="yes">Prefer</p>
+            <p>One rose family, one periwinkle family, one navy room. Heavy border. Slant figlet. Gold/amber legal type. Hotpink as a verb. 80 columns. Keys in secondary pink.</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Why these architecture choices look like this</h2>
+        <p>
+          The design doc’s decisions are taste, encoded. <strong>Textual over CustomTkinter</strong> keeps the fashion inside a real terminal —
+          the pink has to survive 16 colors, SSH latency, and a monospace grid, so it is painted in large strokes (heavy border, figlet, full-width bar), not in hairlines.
+          <strong>httpx / threads / ffmpeg</strong> stay invisible; the UI only owes the user a blushing bar, a sparkline, and a centered status line.
+          When the scrape resolves, metadata appears as a sudden inner panel — the workbench growing a card, not a new window.
+        </p>
+        <p>
+          The leftover CSS for <code>#complete-screen</code>, <code>#variant-confetti</code>, and <code>#farewell-art</code> is not dead weight.
+          It is the designer’s intent: after the job, a beat of theatre; on quit, a goodbye in deeppink.
+          Implement those screens in the same voice. Do not replace them with a toast.
+        </p>
+      </section>
+
+      <footer class="colophon">
+        Source of truth: <code>jabletv/themes.py</code> · screens in <code>landing.py</code>, <code>app.py</code>, <code>library.py</code>, <code>dashboard.py</code>
+        · architecture in <a href="./design.md">design.md</a>
+        <br />Open this file in a browser. The border should breathe. The buttons should blush.
+      </footer>
+    </main>
+  </div>
+</body>
+</html>
