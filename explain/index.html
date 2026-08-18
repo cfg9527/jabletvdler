@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Explain — JableTV design output</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --accent: #fe628e;
+      --secondary-pink: #ff6a88;
+      --coral: #ff8382;
+      --deeppink: #ff1493;
+      --hotpink: #ff69b4;
+      --primary: #91a5f4;
+      --lilac: #b08cf9;
+      --surface: #161a26;
+      --surface-2: #191d28;
+      --surface-3: #1e2333;
+      --text: #e0e0e0;
+      --text-2: #b8babc;
+      --muted: #8e9194;
+      --border: #5e5d5a;
+      --success: #1db954;
+      --warning: #ffd700;
+      --amber: #ff8c00;
+      --font-display: "Fraunces", "Iowan Old Style", Palatino, Georgia, serif;
+      --font-sans: "Outfit", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+      --font-mono: "IBM Plex Mono", "SF Mono", ui-monospace, monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--surface);
+      color: var(--text);
+      font-family: var(--font-sans);
+      font-weight: 400;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    .app-frame {
+      min-height: 100vh;
+      border: 6px solid var(--accent);
+      animation: breathe 6s ease-in-out infinite;
+      background:
+        radial-gradient(1200px 600px at 10% -10%, rgba(254, 98, 142, 0.08), transparent 50%),
+        radial-gradient(900px 500px at 110% 0%, rgba(145, 165, 244, 0.08), transparent 45%),
+        var(--surface);
+    }
+
+    @keyframes breathe {
+      0%, 100% { border-color: #fe628e; }
+      50% { border-color: #ff69b4; }
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem 1.2rem;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.85rem 1.6rem;
+      background: color-mix(in srgb, var(--surface) 88%, transparent);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid color-mix(in srgb, var(--accent) 28%, var(--border));
+    }
+
+    nav .brand {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.82rem;
+      letter-spacing: 0.04em;
+    }
+
+    nav a:hover { color: var(--hotpink); }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem 1.1rem;
+    }
+
+    main {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 5rem;
+    }
+
+    header.hero {
+      padding: 2.2rem 0 3rem;
+    }
+
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 0.7rem;
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.1rem, 5vw, 3.4rem);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.12;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--accent);
+      font-weight: 400;
+    }
+
+    .lede {
+      max-width: 42rem;
+      margin: 1.1rem 0 0;
+      color: var(--text-2);
+      font-size: 1.08rem;
+      font-weight: 300;
+    }
+
+    section { margin: 3.8rem 0; }
+
+    h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.55rem, 3vw, 2.1rem);
+      font-weight: 600;
+      margin-bottom: 0.85rem;
+      letter-spacing: -0.02em;
+    }
+
+    h3 {
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: 1.5rem 0 0.55rem;
+    }
+
+    p { color: var(--text-2); margin-bottom: 0.9rem; }
+    p strong { color: var(--text); font-weight: 500; }
+
+    ul, ol { color: var(--text-2); margin: 0 0 1rem 1.2rem; }
+    li { margin: 0.28rem 0; }
+    li strong { color: var(--text); font-weight: 500; }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--hotpink); }
+
+    code {
+      font-family: var(--font-mono);
+      font-size: 0.86em;
+      color: var(--primary);
+    }
+
+    pre {
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      line-height: 1.5;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      padding: 1rem 1.1rem;
+      overflow-x: auto;
+      color: var(--text);
+      margin: 0.7rem 0 1.1rem;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      padding: 1.15rem 1.25rem;
+    }
+
+    .card:hover { border-color: var(--accent); }
+
+    .card p:last-child { margin-bottom: 0; }
+
+    .pull {
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      padding: 1.3rem 1.4rem;
+      font-family: var(--font-display);
+      font-size: 1.28rem;
+      font-style: italic;
+      line-height: 1.45;
+      color: var(--text);
+      margin: 1.2rem 0;
+    }
+
+    .pull span {
+      display: block;
+      margin-top: 0.85rem;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-style: normal;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.45rem;
+      margin: 1rem 0 1.3rem;
+    }
+
+    .flow .step {
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      padding: 0.75rem 0.7rem;
+      text-align: center;
+    }
+
+    .flow .step b {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.3rem;
+    }
+
+    .flow .step span {
+      font-size: 0.82rem;
+      color: var(--text);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+      margin: 0.7rem 0 1.1rem;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 0.55rem 0.7rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    th {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    td { color: var(--text-2); }
+    td:first-child { color: var(--text); font-family: var(--font-mono); font-size: 0.82rem; }
+
+    .note {
+      border-left: 3px solid var(--primary);
+      padding: 0.7rem 1rem;
+      background: var(--surface-2);
+      margin: 1rem 0;
+    }
+
+    .warn-box {
+      border-left: 3px solid var(--amber);
+      padding: 0.7rem 1rem;
+      background: var(--surface-2);
+      margin: 1rem 0;
+    }
+
+    .tree {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      line-height: 1.45;
+    }
+
+    .swatches {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 0.6rem;
+      margin: 0.8rem 0 1.2rem;
+    }
+
+    .swatch {
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      overflow: hidden;
+    }
+
+    .swatch .chip { height: 56px; }
+
+    .swatch dl { padding: 0.55rem 0.7rem 0.7rem; }
+    .swatch dt { font-size: 0.76rem; color: var(--text); font-weight: 500; }
+    .swatch dd { font-family: var(--font-mono); font-size: 0.68rem; color: var(--muted); }
+
+    ol.rules {
+      list-style: none;
+      counter-reset: rule;
+      display: grid;
+      gap: 0.7rem;
+      margin: 0.8rem 0 1.2rem;
+    }
+
+    ol.rules li {
+      counter-increment: rule;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      padding: 1rem 1.1rem 1rem 3.3rem;
+      position: relative;
+    }
+
+    ol.rules li::before {
+      content: counter(rule);
+      position: absolute;
+      left: 0.9rem;
+      top: 1rem;
+      font-family: var(--font-display);
+      font-style: italic;
+      color: var(--accent);
+      font-size: 1.2rem;
+    }
+
+    ol.rules li strong {
+      display: block;
+      color: var(--text);
+      margin-bottom: 0.2rem;
+    }
+
+    .caption {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-top: -0.4rem;
+      margin-bottom: 1.1rem;
+    }
+
+    footer.colophon {
+      margin-top: 3.5rem;
+      padding-top: 1.3rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-align: center;
+    }
+
+    @media (max-width: 820px) {
+      .split, .flow { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-frame">
+    <nav>
+      <div class="brand">Explain · Design output</div>
+      <div class="nav-links">
+        <a href="#what">What</a>
+        <a href="#product">Product</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#taste">Taste</a>
+        <a href="#screens">Screens</a>
+        <a href="#map">Code map</a>
+        <a href="#drift">Drift</a>
+        <a href="../docs/design/taste.html">Taste primer</a>
+      </div>
+    </nav>
+
+    <main>
+      <header class="hero">
+        <div class="eyebrow">docs/design → HTML walkthrough</div>
+        <h1>How this downloader is <em>designed</em>.</h1>
+        <p class="lede">
+          This page explains the two design artifacts in <code>docs/design/</code>:
+          the architecture note (<code>design.md</code>) and the visual taste primer
+          (<code>taste.html</code>). Together they describe a Textual TUI that
+          downloads HLS video, then dresses the terminal in unapologetic pink.
+        </p>
+      </header>
+
+      <section id="what">
+        <h2>What the design output is</h2>
+        <p>
+          The design output is not a Figma file. It is two complementary documents
+          that encode product intent and visual identity, then point at the Python
+          that already implements most of it.
+        </p>
+        <div class="split">
+          <article class="card">
+            <h3>design.md — the machine</h3>
+            <p>
+              Goals, non-goals, component tree, download pipeline, dependency
+              choices, and risks. This is the “why Textual / httpx / threads /
+              ffmpeg” document. Read it when you need to know how a pasted URL
+              becomes an MP4.
+            </p>
+          </article>
+          <article class="card">
+            <h3>taste.html — the costume</h3>
+            <p>
+              Palette, chrome, motion, screen mocks, and taste rules. This is the
+              “why the window breathes and hover snaps to hotpink” document. Open
+              it in a browser; the border should inhale. Source of truth for color
+              is still <code>jabletv/themes.py</code>.
+            </p>
+          </article>
+        </div>
+        <blockquote class="pull">
+          Pink is the brand. Periwinkle is the job. Hover is the blush.
+          <span>Taste primer thesis · PinkyTheme</span>
+        </blockquote>
+      </section>
+
+      <section id="product">
+        <h2>Product intent</h2>
+        <p>
+          A terminal-based downloader for adult video sites that speak HLS
+          (<code>m3u8</code>). The user pastes a URL, confirms they are 18+, and
+          watches segment progress in a pink-framed window. Output is a clean MP4
+          plus a JSON sidecar in <code>jable_db/</code>.
+        </p>
+        <div class="flow">
+          <div class="step"><b>1</b><span>Paste URL</span></div>
+          <div class="step"><b>2</b><span>Scrape metadata</span></div>
+          <div class="step"><b>3</b><span>Fetch HLS segments</span></div>
+          <div class="step"><b>4</b><span>Decrypt / concat</span></div>
+          <div class="step"><b>5</b><span>ffmpeg → MP4</span></div>
+        </div>
+        <div class="split">
+          <article class="card">
+            <h3>Goals (from design.md)</h3>
+            <ul>
+              <li>Download via URL input, not crawl/search</li>
+              <li>Textual TUI with live progress</li>
+              <li>Concurrent segment downloads</li>
+              <li>AES-128 encrypted HLS</li>
+              <li>MP4 via system ffmpeg</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>Declared non-goals (v1)</h3>
+            <ul>
+              <li>No web UI</li>
+              <li>No multi-site support in v1</li>
+              <li>No catalog crawler</li>
+              <li>No Docker packaging</li>
+            </ul>
+            <p class="caption" style="margin:0.6rem 0 0">MissAV is already in the code; see Drift.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="architecture">
+        <h2>Architecture, explained</h2>
+        <p>
+          One Textual <code>App</code> owns the chrome. Screens push and pop
+          inside a single <code>#window-wrapper</code>. The download engine is
+          ordinary Python threads talking back to the UI with
+          <code>call_from_thread</code>. Nothing about the pipeline is async;
+          the TUI is.
+        </p>
+
+        <h3>Component tree</h3>
+        <pre class="tree">JableDownloaderApp  (textual App, CSS = PinkyTheme.CSS)
+├── LandingScreen          age gate — figlet + bilingual warning
+├── Container#window-wrapper   heavy accent border, breathing color
+│   ├── Header                 title + clock
+│   ├── Container#main-container   80-col workbench
+│   │   ├── Input#url-input
+│   │   ├── Button#download-btn / #library-btn / #dashboard-btn
+│   │   ├── ProgressBar#progress
+│   │   ├── Sparkline#speed-sparkline
+│   │   ├── Label#status-label
+│   │   ├── MetadataDisplay#metadata
+│   │   └── RichLog#log
+│   └── Footer                 key hints in secondary pink
+├── LibraryScreen          search + table + detail
+└── DashboardScreen        2×2 inventory panes</pre>
+
+        <h3>Data flow</h3>
+        <p>
+          The scraper does not download video. It only extracts a
+          <code>VideoInfo</code> dataclass (code, title, actresses, tags,
+          thumbnail, <code>m3u8_url</code>). The downloader then treats that
+          playlist as the job.
+        </p>
+        <pre>URL
+ │
+ ├─ jable.tv  → scraper.scrape()
+ │                regex on &lt;script&gt; vars → VideoInfo
+ │
+ └─ missav.ws → missav_scraper.scrape_missav()
+                  unpack eval’d JS → surrit.com playlist → VideoInfo
+
+VideoInfo
+ └─ downloader.download(video, progress_cb)
+      ├─ resolve master m3u8 → variant playlist
+      ├─ parse segments + AES key/IV
+      ├─ ThreadPoolExecutor(8)
+      │    ├─ GET each .ts
+      │    ├─ AES-CBC decrypt if encrypted
+      │    └─ cache under .parts/ for resume
+      ├─ concat .ts
+      └─ ffmpeg -movflags +faststart → downloaded/CODE - title.mp4
+           └─ metadata_store.save_metadata() → jable_db/CODE.json</pre>
+
+        <h3>Why those libraries</h3>
+        <table>
+          <thead>
+            <tr><th>Choice</th><th>Instead of</th><th>Reason</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Textual</td>
+              <td>CustomTkinter</td>
+              <td>SSH-native, Rich markup, one CSS theme file. Fashion has to survive a monospace grid, so it is painted in large strokes (heavy border, figlet, full-width bar).</td>
+            </tr>
+            <tr>
+              <td>httpx</td>
+              <td>requests</td>
+              <td>HTTP/2 for CDN connection pools. Optional <code>curl_cffi</code> impersonation when Cloudflare 403s the default client.</td>
+            </tr>
+            <tr>
+              <td>ThreadPoolExecutor</td>
+              <td>asyncio gather</td>
+              <td>Segment I/O is bound on the network. Threads are simpler than mixing Textual’s event loop with hundreds of coroutines.</td>
+            </tr>
+            <tr>
+              <td>ffmpeg</td>
+              <td>manual MP4 mux</td>
+              <td>Correct container + faststart. Documented system binary, not a Python wheel.</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="note">
+          <p>
+            The UI only owes the user three reports of work: a blushing progress
+            bar, a speed sparkline, and a centered status line. httpx, AES, and
+            ffmpeg stay invisible.
+          </p>
+        </div>
+      </section>
+
+      <section id="taste">
+        <h2>Visual taste, explained</h2>
+        <p>
+          The primer’s claim is that this is not “dark mode with a pink sticker.”
+          The room is navy-black (<code>#161a26</code>). Identity is the window
+          itself: a heavy pink frame that eases between <code>#fe628e</code> and
+          <code>#ff69b4</code> every three seconds. Work buttons start periwinkle.
+          Pointer events snap to hotpink + white + bold — desire as a hover.
+        </p>
+
+        <h3>Two color families</h3>
+        <div class="swatches">
+          <article class="swatch"><div class="chip" style="background:#fe628e"></div><dl><dt>Accent / frame</dt><dd>#fe628e</dd></dl></article>
+          <article class="swatch"><div class="chip" style="background:#ff69b4"></div><dl><dt>Hover blush</dt><dd>#ff69b4</dd></dl></article>
+          <article class="swatch"><div class="chip" style="background:#ff1493"></div><dl><dt>Figlet / farewell</dt><dd>#ff1493</dd></dl></article>
+          <article class="swatch"><div class="chip" style="background:linear-gradient(90deg,#91a5f4,#b08cf9)"></div><dl><dt>Primary / work</dt><dd>#91a5f4 → #b08cf9</dd></dl></article>
+          <article class="swatch"><div class="chip" style="background:#161a26;border-bottom:1px solid #5e5d5a"></div><dl><dt>Room</dt><dd>#161a26</dd></dl></article>
+          <article class="swatch"><div class="chip" style="background:#1db954"></div><dl><dt>Success</dt><dd>#1db954</dd></dl></article>
+        </div>
+        <p class="caption">Named unused variants (sage, emerald, variant-amber) wait for completion-screen theatre.</p>
+
+        <div class="split">
+          <article class="card">
+            <h3>Chrome</h3>
+            <p>
+              Every screen lives in <code>#window-wrapper</code> at 100% fill with
+              <code>border: heavy $accent</code>. Inner panels use stone
+              (<code>#5e5d5a</code>) until focus, then they flush pink. The
+              workbench is 80 characters, centered. Type hierarchy is color, not
+              size: primary, secondary, muted. Metadata uses Rich markup — cyan
+              codes, yellow names, italic tags.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Motion</h3>
+            <p>
+              Two motions only. Ambient: the outer border animates 3s toward
+              hotpink and 3s back — implemented in
+              <code>JableDownloaderApp._breathe_border()</code>. Pointer: hover
+              does not fade; it snaps. The sparkline is the only extra animation,
+              and it reports speed rather than decorating.
+            </p>
+          </article>
+        </div>
+
+        <h3>Taste rules (implementation constraints)</h3>
+        <ol class="rules">
+          <li>
+            <strong>Pink is identity, not a highlight.</strong>
+            Remove it and the product must not look like “any TUI.” Frame, figlet,
+            hover blush, and progress fill stay pink.
+          </li>
+          <li>
+            <strong>Periwinkle does the work.</strong>
+            Download / Open / Yes may start cool and blush on hover. Do not paint
+            every button pink at rest.
+          </li>
+          <li>
+            <strong>Navy is a room.</strong>
+            Keep <code>#161a26</code> / <code>#191d28</code>. Pure black or warm
+            charcoal makes the rose cheap.
+          </li>
+          <li>
+            <strong>Quiet structure, loud color.</strong>
+            Centered stacks, muted borders, one theatrical object. No fake OS
+            chrome.
+          </li>
+          <li>
+            <strong>Hover snaps. Ambient breathes.</strong>
+            Border: 3s ease, two pinks. Pointer: instant hotpink + bold + white.
+          </li>
+          <li>
+            <strong>Ceremony at the edges.</strong>
+            Age-gate the session. Bilingual gold/amber warnings. Leave room for a
+            farewell — do not replace designed ritual with a toast.
+          </li>
+        </ol>
+      </section>
+
+      <section id="screens">
+        <h2>Screens as costume changes</h2>
+        <p>
+          Same room, different outfits. The frame never leaves. What changes is
+          how much pink you are allowed to feel.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Screen</th><th>Role</th><th>How pink is used</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Age Gate</td>
+              <td>Ceremony. Figlet slant, EN gold + JP amber, loud Yes / gray No. Cannot skip.</td>
+              <td>Deeppink art, accent Yes. The door is the loudest costume.</td>
+            </tr>
+            <tr>
+              <td>Download</td>
+              <td>Workbench. URL, three actions, bar, sparkline, status, metadata, log.</td>
+              <td>Periwinkle primary. Accent fill on the bar. Sparkline in pink. Status quiet until there is news.</td>
+            </tr>
+            <tr>
+              <td>Library</td>
+              <td>Inventory. Search, table, detail, Open in browser.</td>
+              <td>Accent table header and 30% accent cursor. Fashion recedes so the collection can speak.</td>
+            </tr>
+            <tr>
+              <td>Dashboard</td>
+              <td>2×2 panes: tags, titles, actresses, summary.</td>
+              <td>Accent pane titles only. Equal quiet boxes.</td>
+            </tr>
+            <tr>
+              <td>Complete / farewell</td>
+              <td>Designed in CSS (<code>#complete-screen</code>, <code>#variant-confetti</code>, <code>#farewell-art</code>).</td>
+              <td>Not wired in the App yet. After a job the code opens Dashboard instead of a completion beat.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="map">
+        <h2>Design → code map</h2>
+        <p>
+          If you change taste, change <code>PinkyTheme</code> first. Screens
+          compose widgets; they should not invent new hex values.
+        </p>
+        <table>
+          <thead>
+            <tr><th>Design idea</th><th>Where it lives</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Named palette + Textual CSS</td>
+              <td><code>jabletv/themes.py</code> · <code>PinkyTheme</code></td>
+            </tr>
+            <tr>
+              <td>Breathing window border</td>
+              <td><code>app.py</code> · <code>_breathe_border()</code> (3s, <code>#fe628e</code> ↔ <code>#ff69b4</code>)</td>
+            </tr>
+            <tr>
+              <td>Age gate figlet + warnings</td>
+              <td><code>landing.py</code> · <code>LandingScreen</code></td>
+            </tr>
+            <tr>
+              <td>Download workbench</td>
+              <td><code>app.py</code> · <code>JableDownloaderApp.compose()</code></td>
+            </tr>
+            <tr>
+              <td>Library table / cursor</td>
+              <td><code>library.py</code> (local CSS on top of the theme)</td>
+            </tr>
+            <tr>
+              <td>Dashboard 2×2</td>
+              <td><code>dashboard.py</code></td>
+            </tr>
+            <tr>
+              <td>HLS engine</td>
+              <td><code>downloader.py</code></td>
+            </tr>
+            <tr>
+              <td>Site scrapers</td>
+              <td><code>scraper.py</code>, <code>missav_scraper.py</code></td>
+            </tr>
+            <tr>
+              <td>JSON sidecar</td>
+              <td><code>metadata_store.py</code></td>
+            </tr>
+          </tbody>
+        </table>
+        <p>
+          Keys: <code>Enter</code> download, <code>l</code> library,
+          <code>d</code> dashboard, <code>o</code> open URL (library),
+          <code>Escape</code> back. Footer keys are painted
+          <code>SECONDARY_PINK</code>.
+        </p>
+      </section>
+
+      <section id="drift">
+        <h2>Where design and code disagree</h2>
+        <p>
+          The documents are a snapshot of intent. The repo has already moved in
+          a few places. Treat these as known gaps, not bugs in the primer.
+        </p>
+        <div class="warn-box">
+          <p>
+            <strong>Multi-site.</strong> <code>design.md</code> lists MissAV /
+            SupJav as a v1 non-goal. The shipped TUI already accepts
+            <code>missav.ws</code> / <code>missav.com</code> and routes through
+            <code>missav_scraper</code>. The taste primer’s download mock is
+            correct; the architecture note is stale on this point.
+          </p>
+        </div>
+        <div class="warn-box">
+          <p>
+            <strong>Completion ritual.</strong> Theme CSS already styles
+            <code>#complete-screen</code>, confetti, checkmark, and
+            <code>#farewell-art</code>. <code>app.py</code> currently logs
+            “Complete!” and pushes the dashboard. The primer asks not to replace
+            that theatre with a toast — implementing those screens is still open
+            work, in the same voice.
+          </p>
+        </div>
+        <div class="note">
+          <p>
+            <strong>Risks that still apply.</strong> jable.tv can change the
+            m3u8 embedding pattern (regex scrape). CDNs can add Cloudflare
+            (already mitigated with optional <code>curl_cffi</code>). ffmpeg
+            must be installed on the machine. Python 3.9 limits annotation
+            syntax.
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h2>How to use these files</h2>
+        <ol>
+          <li>Open <a href="../docs/design/taste.html">docs/design/taste.html</a> to feel the product — border, palette, hover, screen mocks.</li>
+          <li>Read <a href="../docs/design/design.md">docs/design/design.md</a> for pipeline and dependency decisions.</li>
+          <li>Use this page as the translation: what each document means, where it is implemented, and where it is not.</li>
+          <li>When changing UI, obey the taste rules before adding a new color or a second animation.</li>
+        </ol>
+      </section>
+
+      <footer class="colophon">
+        Explains <code>docs/design/design.md</code> and
+        <a href="../docs/design/taste.html">docs/design/taste.html</a>
+        · tokens in <code>jabletv/themes.py</code>
+        <br />Open this file in a browser. The border should breathe.
+      </footer>
+    </main>
+  </div>
+</body>
+</html>
