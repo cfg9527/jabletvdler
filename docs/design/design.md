@@ -2,6 +2,8 @@
 
 Visual taste primer (palette, chrome, motion, screens): [taste.html](./taste.html)
 
+HTML walkthrough of this document + the primer: [explain/index.html](../../explain/index.html)
+
 ## Context
 A terminal-based video downloader for jable.tv that uses HLS (m3u8) streaming protocol.
 Target audience: technical users comfortable with the terminal.
